@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<faktura>
+    <komputer>
+        <nazwa>ACER Aspire</nazwa>
+        <data_ksiegowania>2025-01-03</data_ksiegowania>
+        <koszt_USD>345</koszt_USD>
+        <koszt_PLN>1445</koszt_PLN>
+    </komputer>
+    <komputer>
+        <nazwa>Dell Latitude</nazwa>
+        <data_ksiegowania>2025-01-10</data_ksiegowania>
+        <koszt_USD>543</koszt_USD>
+        <koszt_PLN>2269</koszt_PLN>
+    </komputer>
+</faktura>

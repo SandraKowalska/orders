@@ -1,9 +1,11 @@
 package com.company.orders.repository;
 
-import java.util.Collection;
+import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.company.orders.model.ComputerInvoice;
@@ -11,10 +13,6 @@ import com.company.orders.model.ComputerInvoice;
 @Repository
 public interface ComputerInvoiceRepository extends JpaRepository<ComputerInvoice, Long> {
 
-    @Query(
-            nativeQuery = true,
-            value = "SELECT * FROM users WHERE (name LIKE CONCAT('%', ?1, '%')) AND points > ?2 AND removed = false"
-    )
-    Collection<ComputerInvoice> findAllByWordContaining(String word);
-
+    @Query("SELECT c FROM ComputerInvoice c WHERE LOWER(c.computerName) LIKE LOWER(CONCAT('%',  :name, '%')) OR c.postingDate = :date ORDER BY c.computerName ASC, c.postingDate ASC")
+    List<ComputerInvoice> searchByComputerNameAndPostingDate(@Param("name") String name, @Param("date") LocalDate date);
 }

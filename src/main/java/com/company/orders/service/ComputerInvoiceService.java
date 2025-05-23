@@ -1,6 +1,6 @@
 package com.company.orders.service;
 
-import java.util.Collection;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,10 +35,7 @@ public class ComputerInvoiceService {
         computerInvoiceRepository.save(computerInvoice);
     }
 
-    public Collection<ComputerInvoiceDto> searchComputerInvoiceByWord(String word) {
-        final Collection<ComputerInvoiceDto> computerInvoices = computerInvoiceRepository.findAllByWordContaining(word)
-                .stream().map(computerInvoice -> computerInvoiceMapper.toDto(computerInvoice))
-                .collect(Collectors.toList());
-        return computerInvoices;
+    public List<ComputerInvoice> searchComputerInvoice(String namePart, LocalDate date) {
+        return computerInvoiceRepository.searchByComputerNameAndPostingDate(namePart, date);
     }
 }
