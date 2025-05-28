@@ -1,6 +1,7 @@
 package com.company.orders.service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,24 @@ public class ComputerInvoiceService {
         computerInvoiceRepository.save(computerInvoice);
     }
 
-    public List<ComputerInvoice> searchComputerInvoice(String namePart, LocalDate date) {
-        return computerInvoiceRepository.searchByComputerNameAndPostingDate(namePart, date);
+    public List<ComputerInvoiceDto> searchComputerInvoice(String computerName, LocalDate postingDate, String sort) {
+        final List<ComputerInvoice> computerInvoices = (List<ComputerInvoice>) computerInvoiceRepository.findAll();
+        return computerInvoices.stream().map(computerInvoice -> computerInvoiceMapper.toDto(computerInvoice))
+        .filter(c -> computerName == null || c.getComputerName().toLowerCase().contains(computerName.toLowerCase()))
+        .filter(c -> postingDate == null || c.getPostingDate().equals(postingDate))
+        .sorted(getComparator(sort))
+        .collect(Collectors.toList());
+    }
+    
+    private Comparator<ComputerInvoiceDto> getComparator(String sort) {
+        if (sort == null) return Comparator.comparing(ComputerInvoiceDto::getComputerName);
+        boolean desc = sort.startsWith("-");
+        String field = desc ? sort.substring(1) : sort;
+        Comparator<ComputerInvoiceDto> comparator = switch (field) {
+            case "computerName" -> Comparator.comparing(ComputerInvoiceDto::getComputerName);
+            case "postingDate" -> Comparator.comparing(ComputerInvoiceDto::getPostingDate);
+            default -> Comparator.comparing(ComputerInvoiceDto::getComputerName);
+        };
+        return desc ? comparator.reversed() : comparator;
     }
 }
