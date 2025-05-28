@@ -39,14 +39,16 @@ public class ComputerInvoiceService {
     public List<ComputerInvoiceDto> searchComputerInvoice(String computerName, LocalDate postingDate, String sort) {
         final List<ComputerInvoice> computerInvoices = (List<ComputerInvoice>) computerInvoiceRepository.findAll();
         return computerInvoices.stream().map(computerInvoice -> computerInvoiceMapper.toDto(computerInvoice))
-        .filter(c -> computerName == null || c.getComputerName().toLowerCase().contains(computerName.toLowerCase()))
-        .filter(c -> postingDate == null || c.getPostingDate().equals(postingDate))
-        .sorted(getComparator(sort))
-        .collect(Collectors.toList());
+                .filter(c -> computerName == null
+                        || c.getComputerName().toLowerCase().contains(computerName.toLowerCase()))
+                .filter(c -> postingDate == null || c.getPostingDate().equals(postingDate))
+                .sorted(getComparator(sort))
+                .collect(Collectors.toList());
     }
-    
+
     private Comparator<ComputerInvoiceDto> getComparator(String sort) {
-        if (sort == null) return Comparator.comparing(ComputerInvoiceDto::getComputerName);
+        if (sort == null)
+            return Comparator.comparing(ComputerInvoiceDto::getComputerName);
         boolean desc = sort.startsWith("-");
         String field = desc ? sort.substring(1) : sort;
         Comparator<ComputerInvoiceDto> comparator = switch (field) {
@@ -55,5 +57,10 @@ public class ComputerInvoiceService {
             default -> Comparator.comparing(ComputerInvoiceDto::getComputerName);
         };
         return desc ? comparator.reversed() : comparator;
+    }
+
+    public String deleteComputerInvoice(Long id) {
+        computerInvoiceRepository.deleteById(id);
+        return String.format("Computer invoice has been deleted", id);
     }
 }

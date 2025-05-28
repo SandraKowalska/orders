@@ -14,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -33,14 +34,17 @@ public class ComputerInvoice {
     @XmlTransient
     private Long id;
     @Column(name = "nazwa")
+    @NotNull
     @XmlElement(name = "nazwa")
     private String computerName;
     @Column(name = "data_ksiegowania")
     @XmlElement(name = "data_ksiegowania")
+    @NotNull
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate postingDate;
     @Column(name = "koszt_USD")
+    @NotNull
     @XmlElement(name = "koszt_USD")
     private Integer computerCost_in_USD;
     @Column(name = "koszt_PLN")
